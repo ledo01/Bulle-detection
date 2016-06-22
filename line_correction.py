@@ -7,33 +7,21 @@ def distance(point1,point2):
     x2,y2 = point2
     return sqrt((x2-x1)**2 + (y2-y1)**2)
 
-def find_nearest(point,pointArray):
-    prev_d = distance(point,pointArray[0])
-    m = 0
-    for i in range(len(pointArray)):
-        d = distance(point,pointArray[i])
+def find_nearest(points,k):
+    p = points[k]
+    prev_d = 9999
+    for i in range(k+1,len(points)):
+        d = distance(p,points[i])
         if d < prev_d :
             m = i
+            prev_d = d
     return m
 
-def trim(array):
-    idx = 0
-    while idx < len(array):
-        print(len(array))
-        if idx < len(array):
-            p1 = array[idx]
-            p2 = array[idx + 1]
-            if distance(p1,p2) > 100:
-                array.pop(idx + 1)
-            else:
-                idx += 1
-        else:
-            break
-# def continu(pointArray):
-#     contArray = []
-#     for i in range(len(pointArray)):
-#         if len(pointArray[(i+1):]) > 1:
-#             idx = find_nearest(pointArray[i],pointArray[(i+1):])
-#             point = pointArray[(i+1):][idx]
-#             contArray.append(point)
-#     return contArray
+
+def continu(pointArray):
+    contArray = []
+    i = 0
+    while i < len(pointArray)-1:
+        i = find_nearest(pointArray,i)
+        contArray.append(pointArray[i])
+    return np.asarray(contArray)

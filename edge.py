@@ -5,22 +5,11 @@ from skimage import feature,data, io
 from skimage.color import rgb2gray
 from math import sqrt
 
-# def distance(point1,point2):
-#     x1,y1 = point1
-#     x2,y2 = point2
-#     return sqrt((x2-x1)**2 + (y2-y1)**2)
-#
-# def trim(array):
-#     newArray = np.copy(array)
-#     idx = 0
-#     while idx < len(newArray) - 1:
-#         p1 = newArray[idx]
-#         p2 = newArray[idx + 1]
-#         if distance(p1,p2) > 75:
-#             newArray = np.delete(newArray,idx+1,0)
-#         else:
-#             idx += 1
-#     return newArray
+def distance(point1,point2):
+    "Find the distance between two points"
+    x1,y1 = point1
+    x2,y2 = point2
+    return sqrt((x2-x1)**2 + (y2-y1)**2)
 
 filename = os.path.join('img.png')
 im_color = io.imread(filename)
@@ -30,22 +19,21 @@ im = im[550:750,860:1050]
 
 edges1 = feature.canny(im,1) # Compute the Canny filter
 y,x = np.where(edges1 == True)
+courbe = np.asarray(list(zip(x,y)))
+courbe = courbe[courbe[:,0].argsort()]
+
+# i = 0
+# while i < len(courbe) -1 :
+#     if distance(courbe[i],courbe[i+1]) > 50:
+#         courbe = np.delete(courbe,i+1,axis=0)
+#     else:
+#         i += 1
+# xx,yy = courbe[:,0],courbe[:,1]
+# plt.plot(xx,yy,'o-')
+# plt.show()
+
 # display results
 # plt.imshow(im,cmap='RdGy')
 # plt.scatter(x,y,c='k')
+# plt.plot(x[:30],y[:30],'o-')
 # plt.show()
-
-arr = np.short(list(zip(x,y)))
-l = arr[np.argsort(arr[:,0])]
-
-newArray = np.copy(l)
-idx = 0
-while idx < len(newArray) - 1:
-    x1,y1 = newArray[idx]
-    x2,y2 = newArray[idx + 1]
-    if abs(y2-y1) > 20:
-        newArray = np.delete(newArray,idx+1,0)
-    else:
-        idx += 1
-
-plt.plot(newArray[:,0],newArray[:,1],'o')
